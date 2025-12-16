@@ -1,0 +1,10 @@
+{
+    "dockerfile_lines": [],
+    "graphs": {
+        "ChineseStoryAgent": "./src/Chinese_Story/graph.py:graph",
+        "EnglishStoryAgent": "./src/English_Story/graph.py:graph"
+    },
+    "env": ".env",
+    "python_version": "3.13",
+    "dependencies": ["."]
+}
