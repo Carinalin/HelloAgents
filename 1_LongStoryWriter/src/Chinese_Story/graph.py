@@ -12,7 +12,7 @@ llm = init_chat_model(model_provider="deepseek", model="deepseek-chat", temperat
 def concept_developer(state: NovelState):
     print("---🧠 执行: 概念开发者 ---")
     prompt = CONCEPT_DEVELOPER_PROMPT.format(user_prompt=state['messages'][-1].content, 
-                                             human_feedback = state.get('human_analyst_feedback', ''))
+                                             human_feedback = state.get('human_feedback', ''))
     structured_llm = llm.with_structured_output(ConceptOutput)
     result = structured_llm.invoke(prompt)
     print(f"   - 类型: {result.genre}")
