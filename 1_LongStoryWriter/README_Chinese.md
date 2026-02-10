@@ -83,7 +83,7 @@
 1. **克隆项目**
 
 ```bash
-git clone https://github.com/your-username/1_LongStoryWriter.git
+git clone https://github.com/Carinalin/HelloAgents.git
 cd 1_LongStoryWriter
 ```
 

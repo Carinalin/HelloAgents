@@ -82,7 +82,7 @@ Scene Selection → Writing → Editing → [Approval? → Finalization | Revisi
 1. **Clone the project**
 
 ```bash
-git clone https://github.com/your-username/1_LongStoryWriter.git
+git clone https://github.com/Carinalin/HelloAgents.git
 cd 1_LongStoryWriter
 ```
 
