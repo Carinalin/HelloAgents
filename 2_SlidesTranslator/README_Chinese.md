@@ -1,5 +1,7 @@
 # PPT 翻译 Agent
 
+[English README](./README.md)
+
 基于 Streamlit 构建的强大 Web 应用程序，能够智能翻译 PowerPoint 演示文稿的文本框（暂不支持翻译表格、SmartArt、图表等），同时保持原始设计和格式。该项目利用 LangGraph 进行工作流编排，支持多个大语言模型提供商，提供高质量的翻译服务。
 
 ![image-20260211181128512](asset/image-20260211181128512.png)

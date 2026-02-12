@@ -1,5 +1,7 @@
 # PPT Translation Agent
 
+[Chinese README](./README_Chinese.md)
+
 A powerful web application built with Streamlit that intelligently translates text boxes in PowerPoint presentations (currently does not support tables, SmartArt, or charts) while preserving original design and formatting. This project leverages LangGraph for workflow orchestration and supports multiple LLM providers for high-quality translations.
 
 ![image-20260211181128512](asset/image-20260211181128512.png)
