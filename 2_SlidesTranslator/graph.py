@@ -426,7 +426,6 @@ def node_reconstruct_ppt(state: AgentState) -> AgentState:
                         if not run.text:
                             continue
                         
-                        # 确保所有bullet相关字段都存在（避免KeyError）
                         style = {
                             'paragraph_idx': para_idx,
                             'run_idx': run_idx,
@@ -437,18 +436,18 @@ def node_reconstruct_ppt(state: AgentState) -> AgentState:
                             'space_after': para_space_after,
                             'level': para_level,
                             
-                            # ===== 项目符号/编号信息（确保所有字段都有默认值）=====
+                            # ===== 项目符号/编号信息 =====
                             'has_bullet': bullet_info.get('has_bullet', False),
                             'bullet_type': bullet_info.get('bullet_type', 'inherited'),
                             
-                            # 项目符号专用（即使不是char类型也设置None）
+                            # 项目符号专用
                             'bullet_char': bullet_info.get('bullet_char', None),
                             
-                            # 编号专用（即使不是autoNum类型也设置None）
+                            # 编号专用
                             'auto_num_type': bullet_info.get('auto_num_type', None),
                             'auto_num_start': bullet_info.get('auto_num_start', 1),
                             
-                            # 共用样式（所有类型都可能有）
+                            # 共用样式
                             'bullet_font_name': bullet_info.get('bullet_font_name', None),
                             'bullet_font_size': bullet_info.get('bullet_font_size', None),
                             'bullet_color': bullet_info.get('bullet_color', None),

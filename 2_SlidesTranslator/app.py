@@ -33,9 +33,9 @@ def setup_logging():
         format=log_format,
         datefmt=date_format,
         handlers=[
-            # 1. 输出到文件 (用于生产环境排查)
+            # 1. 输出到文件
             logging.FileHandler(log_file, encoding='utf-8'),
-            # 2. 输出到控制台 (Streamlit 底部可以看到)
+            # 2. 输出到控制台
             logging.StreamHandler(sys.stdout)
         ]
     )
@@ -44,7 +44,7 @@ def main():
     # 初始化日志配置
     setup_logging()
     
-    # 获取 logger (在 main 中也使用 logger 打印配置信息)
+    # 获取 logger
     logger = logging.getLogger(__name__)
 
     # 绘制前端

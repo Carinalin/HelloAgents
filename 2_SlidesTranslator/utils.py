@@ -1,6 +1,6 @@
 import os
 import re
-from typing import List, Dict
+from typing import List, Dict, Optional
 from pptx.util import Pt, Inches, Emu
 from pptx.oxml.ns import qn
 from lxml import etree
@@ -13,12 +13,6 @@ def load_prompt(file_path: str) -> str:
     """
     读取 prompt 文本文件
     """
-    """
-    if not os.path.isabs(file_path):
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(base_dir, file_path)
-    """
-    
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Prompt 文件不存在: {file_path}")
         
@@ -69,7 +63,6 @@ def get_visual_width_ratio(original_text: str, translated_text: str) -> float:
 
 # 文本框是否重叠检测
 def is_overlap(box1: Dict, box2: Dict, margin: float = Inches(0.05)) -> bool:
-        """检测两个文本框是否重叠"""
         left1, top1, right1, bottom1 = (
             int(box1['left'] - margin), int(box1['top'] - margin),
             int(box1['left'] + box1['width'] + margin), int(box1['top'] + box1['height'] + margin)
@@ -83,12 +76,10 @@ def is_overlap(box1: Dict, box2: Dict, margin: float = Inches(0.05)) -> bool:
 
 # 检测是否存在阿拉伯数字
 def has_arabic_numbers(text: str) -> bool:
-        """检测文本是否包含阿拉伯数字"""
         return bool(re.search(r'\d+', text))
 
 # 获取文本框中文字的平均字号
 def get_font_size(shape) -> Optional[Pt]:
-    """获取文本框中文字的平均字号"""
     sizes = []
     for paragraph in shape.text_frame.paragraphs:
         for run in paragraph.runs:
@@ -98,7 +89,6 @@ def get_font_size(shape) -> Optional[Pt]:
 
 # 获取文本框的主要对齐方式 
 def get_paragraph_alignment(shape) -> Optional[PP_ALIGN]:
-    """获取文本框的主要对齐方式"""
     alignments = []
     for paragraph in shape.text_frame.paragraphs:
         if paragraph.alignment:
@@ -111,9 +101,6 @@ def get_paragraph_alignment(shape) -> Optional[PP_ALIGN]:
 
 # 将原有样式应用到修改后的文本框
 def apply_styles(shape, original_styles: List[Dict]) -> None:
-    """
-    将原有样式应用到修改后的文本框
-    """
     text_frame = shape.text_frame
     style_idx = 0
 
@@ -134,7 +121,7 @@ def apply_styles(shape, original_styles: List[Dict]) -> None:
         if style.get('level') is not None:
             paragraph.level = style['level']
 
-        # --- 项目符号/编号样式（关键：直接操作XML）---
+        # --- 项目符号/编号样式 ---
         apply_bullet_style(p_elem, style)
 
         # --- 字符级格式 ---
@@ -208,9 +195,6 @@ def calculate_dynamic_reduction_ratio(length_ratio: float) -> float:
 
 # 从段落XML元素中提取完整的项目符号/编号信息
 def extract_bullet_info_from_xml(p_elem) -> Dict:
-    """
-    提取项目符号信息（改进继承检测）
-    """
     bullet_info = {
         'has_bullet': False,
         'bullet_type': 'inherited',  # 默认假设继承
@@ -284,9 +268,6 @@ def extract_bullet_info_from_xml(p_elem) -> Dict:
 
 # 应用项目符号/编号样式
 def apply_bullet_style(p_elem, style: Dict) -> None:
-    """
-    应用项目符号或编号样式到XML（修复KeyError）
-    """
     # 获取或创建 <a:pPr>
     pPr = None
     for child in p_elem:
@@ -323,7 +304,7 @@ def apply_bullet_style(p_elem, style: Dict) -> None:
         etree.SubElement(pPr, qn('a:buNone'))
         return
     
-    # === 2. 自定义字符项目符号（修复：使用.get()）===
+    # === 2. 自定义字符项目符号 ===
     elif bullet_type == 'char':
         # 修复：使用.get()提供默认值，避免KeyError
         bullet_char = style.get('bullet_char', '•')  # 默认黑点
@@ -354,12 +335,9 @@ def apply_bullet_style(p_elem, style: Dict) -> None:
         # 如果bullet_type是None或其他未知值，不要清理XML
         pass
 
-
+# 辅助函数：添加项目符号/编号的共用样式元素
 def _add_bullet_style_elements(pPr, style: Dict) -> None:
-    """
-    辅助函数：添加项目符号/编号的共用样式元素（修复：使用.get()）
-    """
-    # 字体（修复：使用.get()）
+    # 字体
     bullet_font = style.get('bullet_font_name')
     if bullet_font and bullet_font != 'default':
         buFont = etree.SubElement(pPr, qn('a:buFont'))
@@ -367,13 +345,13 @@ def _add_bullet_style_elements(pPr, style: Dict) -> None:
         buFont.set('pitchFamily', '34')
         buFont.set('charset', '0')
     
-    # 大小（修复：使用.get()）
+    # 大小
     bullet_size = style.get('bullet_font_size')
     if bullet_size is not None:
         buSzPct = etree.SubElement(pPr, qn('a:buSzPct'))
         buSzPct.set('val', str(int(bullet_size * 1000)))
     
-    # 颜色（修复：使用.get()）
+    # 颜色
     bullet_color = style.get('bullet_color')
     bullet_color_type = style.get('bullet_color_type')
     if bullet_color and bullet_color_type:

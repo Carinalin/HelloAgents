@@ -23,7 +23,7 @@ A powerful web application built with Streamlit that intelligently translates te
 
 ## 📋 Requirements
 
-- Python 3.8+
+- Python 3.12
 - Streamlit
 - LangGraph
 - LangChain

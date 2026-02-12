@@ -23,7 +23,7 @@
 
 ## 📋 系统要求
 
-- Python 3.8+
+- Python 3.12
 - Streamlit
 - LangGraph
 - LangChain
